@@ -1,0 +1,22 @@
+{
+    "name": "Temasya Sukan YTN",
+    "short_name": "TSYTN",
+    "start_url": "/",
+    "display": "standalone",
+    "theme_color": "#0b57d0",
+    "background_color": "#ffffff",
+    "description": "Official app for Temasya Sukan YTN.",
+    "icons": [
+        {
+            "src": "/icons/192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+
+}
