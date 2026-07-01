@@ -21,10 +21,16 @@ class AddVenue extends Component
     public $description = '';
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         return view('livewire.add-venue');
     }
 
     public function save(){
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         $this->validate();
         Venue::create([
             'name' => $this->name,

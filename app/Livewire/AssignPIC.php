@@ -29,10 +29,16 @@ class AssignPIC extends Component
     }
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         return view('livewire.assign-p-i-c');
     }
 
     public function store(){
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         $this->validate();
 
         // 1. Add into pic table (PicSport)

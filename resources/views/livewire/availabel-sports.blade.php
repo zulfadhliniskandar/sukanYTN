@@ -5,14 +5,16 @@
             <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Available Sports</h1>
             <p class="mt-2 text-sm text-slate-500">View all registered sports and their designated venues.</p>
         </div>
-        <a href="{{ route('createSports') }}" wire:navigate
-            class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-sm hover:bg-blue-700 hover:shadow-md transition-all">
-            <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Add Sport
-        </a>
+        @if(auth()->check() && auth()->user()->hasRole('Admin'))
+            <a href="{{ route('createSports') }}" wire:navigate
+                class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white font-semibold rounded-lg shadow-sm hover:bg-blue-700 hover:shadow-md transition-all">
+                <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Sport
+            </a>
+        @endif
     </div>
 
     <!-- Sports Grid -->
@@ -25,23 +27,28 @@
                             <h2 class="text-xl font-bold text-slate-800">{{ $sport->name }}</h2>
                             <span
                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase
-                                                                                {{ $sport->type === 'team' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
+                                                                                                    {{ $sport->type === 'team' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
                                 {{ $sport->type }}
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('listPIC', $sport->id) }}" wire:navigate
-                        class="inline-flex items-center justify-center px-4 py-2 bg-slate-50 text-slate-700 border border-slate-300 font-semibold rounded-lg shadow-sm hover:bg-slate-100 hover:text-slate-900 transition-all text-sm whitespace-nowrap">
-                        Manage PICs
-                    </a>
+                    @if(auth()->check() && auth()->user()->hasRole('Admin'))
+                        <a href="{{ route('listPIC', $sport->id) }}" wire:navigate
+                            class="inline-flex items-center justify-center px-4 py-2 bg-slate-50 text-slate-700 border border-slate-300 font-semibold rounded-lg shadow-sm hover:bg-slate-100 hover:text-slate-900 transition-all text-sm whitespace-nowrap">
+                            Manage PICs
+                        </a>
+                    @endif
                 </div>
-                <div>
-                    <a href="{{ route('editSport', $sport->id) }}" wire:navigate
-                        class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Edit</a>
-                    <button wire:confirm="Are you sure you want to delete this sport?"
-                        wire:click="deleteSport({{ $sport->id }})" wire:navigate
-                        class="text-sm font-medium text-red-600 hover:text-blue-800 transition-colors">Delete</button>
-                </div>
+                @if(auth()->check() && auth()->user()->hasRole('Admin'))
+                    <div>
+                        <a href="{{ route('editSport', $sport->id) }}" wire:navigate
+                            class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Edit</a>
+                        <button wire:confirm="Are you sure you want to delete this sport?"
+                            wire:click="deleteSport({{ $sport->id }})" wire:navigate
+                            class="text-sm font-medium text-red-600 hover:text-blue-800 transition-colors">Delete</button>
+                    </div>
+                @endif
+
 
                 <div class="mt-4 pt-4 border-t border-slate-100">
                     <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Venue Location</p>

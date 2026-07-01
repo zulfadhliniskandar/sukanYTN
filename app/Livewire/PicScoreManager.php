@@ -49,6 +49,9 @@ class PicScoreManager extends Component
     
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         return view('livewire.pic-score-manager');
     }
 }

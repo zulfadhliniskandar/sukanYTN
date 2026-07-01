@@ -26,7 +26,7 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
         @auth
-            @if (auth()->check() && auth()->user()->hasRole('PIC'))
+            @if (auth()->check() && auth()->user()->hasRole('PIC||Admin'))
                 <livewire:layout.navigation-pic />
             @else
                 <livewire:layout.navigation />

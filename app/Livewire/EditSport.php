@@ -28,6 +28,9 @@ class EditSport extends Component
     }
 
     public function updateSport(){
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         $this->validate();
         $this->sport->update([
             'name' => $this->name,
@@ -39,6 +42,9 @@ class EditSport extends Component
     }   
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         return view('livewire.edit-sport');
     }
 }

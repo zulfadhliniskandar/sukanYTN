@@ -24,10 +24,17 @@ class AddSports extends Component
 
     public function render()
     {
+        if(!auth()->check()|| !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
+
         return view('livewire.add-sports');
     }
 
     public function save(){
+        if(!auth()->check()|| !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         $this->validate();
         Sport::create([
             'name' => $this->name,

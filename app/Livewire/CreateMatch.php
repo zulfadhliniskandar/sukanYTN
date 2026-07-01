@@ -27,10 +27,17 @@ class CreateMatch extends Component
 
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         return view('livewire.create-match');
     }
 
     public function save(){
+        
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         $this->validate();
         MatchRecord::create([
             'sport_id' => $this->sport,

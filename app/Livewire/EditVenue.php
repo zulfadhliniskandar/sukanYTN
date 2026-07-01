@@ -32,6 +32,9 @@ class EditVenue extends Component
 
     public function updateVenue()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         $this->validate();
         $this->venue->update([
             'name' => $this->name,
@@ -45,6 +48,9 @@ class EditVenue extends Component
     }   
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
+            abort(404);
+        }
         return view('livewire.edit-venue');
     }
 }

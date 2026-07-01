@@ -27,6 +27,7 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
+Route::middleware('auth')->group(function () {
     Route::get('/scores/{match}', PublicScoreboard::class)->name('scores.show');
     Route::get('/scores', MatchList::class)->name('listMatch');
     Route::get('/addvenue', AddVenue::class)->name('addVenue');
@@ -40,9 +41,11 @@ Route::view('profile', 'profile')
     Route::get('/editvenue/{venue}', EditVenue::class)->name('editVenue');
     Route::get('/editsport/{sport}', EditSport::class)->name('editSport');
 
-// Protected management route for PICs only
-Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {
     Route::get('/manage/scores/{match}', PicScoreManager::class)->name('scores.manage');
 });
+// Protected management route for PICs only
+//Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {
+    //Route::get('/manage/scores/{match}', PicScoreManager::class)->name('scores.manage');
+//});
 
 require __DIR__.'/auth.php';

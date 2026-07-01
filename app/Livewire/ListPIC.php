@@ -18,6 +18,9 @@ class ListPIC extends Component
     }
     public function render()
     {
+        if(!auth()->check() || !auth()->user()->hasRole(['Admin'])){
+            abort(404);
+        }
         return view('livewire.list-p-i-c');
     }
 }
