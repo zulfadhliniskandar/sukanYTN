@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\AddSports;
+use App\Livewire\ApproveRegistration;
 use App\Livewire\EditSport;
 use App\Livewire\ListAvailableVenue;
 use App\Livewire\MatchList;
@@ -13,6 +14,7 @@ use App\Livewire\CreateMatch;
 use App\Livewire\AssignPIC;
 use App\Livewire\ListPIC;
 use App\Livewire\EditVenue;
+use App\Livewire\RegisterSport;
 
 //use App\Models\MatchRecord;
 
@@ -42,6 +44,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/editsport/{sport}', EditSport::class)->name('editSport');
 
     Route::get('/manage/scores/{match}', PicScoreManager::class)->name('scores.manage');
+
+    Route::get('/registerSport', RegisterSport::class)->name('registerSport');
+
+    Route::get('/approveRegistration', ApproveRegistration::class)->name('approveRegistration');
 });
 // Protected management route for PICs only
 //Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {

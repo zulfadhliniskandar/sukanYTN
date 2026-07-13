@@ -1,6 +1,5 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Page Header -->
-    @if(auth()->check() && auth()->user()->hasRole('PIC||Admin'))
+    @if(auth()->check() && auth()->user()->hasRole(['PIC', 'Admin']))
         <div>
             <a href="/creatematch" wire:navigate
                 class="text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">Create
@@ -57,13 +56,13 @@
                 <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-sm">
                     <span
                         class="px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide flex items-center gap-1.5
-                                                                                                            {{ $match->status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
+                                                                                                                {{ $match->status === 'ongoing' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-600 border border-slate-200' }}">
                         @if($match->status === 'ongoing')
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         @endif
                         {{ ucfirst($match->status) }}
                     </span>
-                    @if(auth()->check() && auth()->user()->hasRole('pic||admin'))
+                    @if(auth()->check() && auth()->user()->hasRole(['PIC', 'Admin']))
                         <a href="{{ $match->status === 'ongoing' ? route('scores.manage', $match->id) : '#' }}"
                             @if($match->status === 'ongoing') wire:navigate @endif
                             class="text-xs font-bold {{ $match->status === 'ongoing' ? 'text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100' : 'text-gray-400 bg-gray-100 cursor-not-allowed pointer-events-none'}}">
