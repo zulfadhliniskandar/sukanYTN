@@ -15,6 +15,8 @@ use App\Livewire\AssignPIC;
 use App\Livewire\ListPIC;
 use App\Livewire\EditVenue;
 use App\Livewire\RegisterSport;
+use App\Livewire\RegistrationStatus;
+use App\Livewire\AthleteListForEachSport;
 
 //use App\Models\MatchRecord;
 
@@ -48,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/registerSport', RegisterSport::class)->name('registerSport');
 
     Route::get('/approveRegistration', ApproveRegistration::class)->name('approveRegistration');
+    Route::get('/registrationStatus', RegistrationStatus::class)->name('registrationStatus');
+    Route::get('athleteListForEachSport/{sport}', AthleteListForEachSport::class)->name('athleteListForEachSport');
 });
 // Protected management route for PICs only
 //Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {

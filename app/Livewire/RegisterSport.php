@@ -108,6 +108,6 @@ class RegisterSport extends Component
         ]);
         $this->reset();
         session()->flash('success', 'You have successfully registered for the sport');
-        $this->redirect('/listSport');
+        $this->redirect(route('dashboard'));
     }
 }

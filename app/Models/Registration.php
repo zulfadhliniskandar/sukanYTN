@@ -26,4 +26,9 @@ class Registration extends Model
     {
         return $this->belongsTo(Sport::class, 'sport_id');
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

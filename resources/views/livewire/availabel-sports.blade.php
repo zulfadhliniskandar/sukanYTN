@@ -23,13 +23,19 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-1 gap-4">
                     <div>
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-wrap items-center gap-3">
                             <h2 class="text-xl font-bold text-slate-800">{{ $sport->name }}</h2>
                             <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase
-                                                                                                    {{ $sport->type === 'team' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide uppercase {{ $sport->type === 'team' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200' }}">
                                 {{ $sport->type }}
                             </span>
+                            <a href="{{ route('athleteListForEachSport', $sport->id) }}" wire:navigate
+                                class="inline-flex items-center px-3 py-1 bg-white border border-gray-300 rounded-full text-xs font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+                                <svg class="mr-1.5 h-3.5 w-3.5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Athletes ({{ $sport->registrations()->where('status', 'approved')->count() }})
+                            </a>
                         </div>
                     </div>
                     @if(auth()->check() && auth()->user()->hasRole('Admin'))

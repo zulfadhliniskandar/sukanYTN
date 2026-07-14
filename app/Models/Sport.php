@@ -30,11 +30,7 @@ class Sport extends Model
         return $this->hasMany(PicSport::class, 'sport_id');
     }
 
-    public function user(): HasMany
-    {
-        return $this->hasMany(User::class, 'id');
-    }
-
+    // A Sport has many Registrations (linked via sport_id in registrations table)
     public function registrations(): HasMany
     {
         return $this->hasMany(Registration::class, 'sport_id');

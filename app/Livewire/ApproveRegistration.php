@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Registration;
+use App\Models\User;
 
 
 class ApproveRegistration extends Component
@@ -24,14 +25,24 @@ class ApproveRegistration extends Component
         return view('livewire.approve-registration');
     }
 
-    public function updateStatus($status, Registration $registration)
+    public function updateStatus($newStatus, Registration $registration)
     {
         if (!auth()->check()) {
             abort(404);
         }
-        $status = $registration->update([
-            'status' => $status,
+        
+        $registration->update([
+            'status' => $newStatus,
         ]);
+
+        if ($newStatus === 'approved' && $registration->user_id) {
+            $user = User::find($registration->user_id);
+            if ($user) {
+                $user->role = 'Athlete';
+                $user->save();
+            }
+        }
+
         session()->flash('success', 'Registration status updated successfully');
         return redirect()->route('approveRegistration');
     }
