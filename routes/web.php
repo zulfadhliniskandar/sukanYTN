@@ -17,6 +17,10 @@ use App\Livewire\EditVenue;
 use App\Livewire\RegisterSport;
 use App\Livewire\RegistrationStatus;
 use App\Livewire\AthleteListForEachSport;
+use App\Livewire\AddContingent;
+use App\Livewire\Listcontingents;
+use App\Livewire\EditContingent;
+use App\Livewire\ListApprovedRegistrations;
 
 //use App\Models\MatchRecord;
 
@@ -52,6 +56,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/approveRegistration', ApproveRegistration::class)->name('approveRegistration');
     Route::get('/registrationStatus', RegistrationStatus::class)->name('registrationStatus');
     Route::get('athleteListForEachSport/{sport}', AthleteListForEachSport::class)->name('athleteListForEachSport');
+    Route::get('/addContingent', AddContingent::class)->name('addContingent');
+    Route::get('/listcontingents', Listcontingents::class)->name('listContingents');
+    Route::get('/editcontingent/{contingent}', EditContingent::class)->name('editContingent');
+    Route::get('/listApprovedRegistrations', ListApprovedRegistrations::class)->name('listApprovedRegistrations');
+
 });
 // Protected management route for PICs only
 //Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {

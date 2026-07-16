@@ -61,6 +61,16 @@ new class extends Component {
                         {{ __('List Sport') }}
                     </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
                 </div>
+                @if(auth()->user()->hasRole(['Admin']))
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingent')"
+                            wire:navigate>
+                            {{ __('List Contingent') }}
+                        </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
+                    </div>
+                @endif
+
+
 
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('scores.manage', ['match_id' => $match->id])"
