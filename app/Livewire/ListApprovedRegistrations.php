@@ -24,4 +24,19 @@ class ListApprovedRegistrations extends Component
     {
         return view('livewire.list-approved-registrations');
     }
+
+    public function deleteRegistration(Registration $registration)
+    {
+        $registration->delete();
+        $this->approvedRegistrations = Registration::where('status', 'approved')->get();
+        session()->flash('success', 'Registration deleted successfully');
+    }
+
+    public function changeStatus(Registration $registration, $status)
+    {
+        $registration->status = $status;
+        $registration->save();
+        $this->approvedRegistrations = Registration::where('status', 'approved')->get();
+        session()->flash('success', 'Registration status changed successfully');
+    }
 }

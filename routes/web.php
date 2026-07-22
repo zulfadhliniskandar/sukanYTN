@@ -21,13 +21,25 @@ use App\Livewire\AddContingent;
 use App\Livewire\Listcontingents;
 use App\Livewire\EditContingent;
 use App\Livewire\ListApprovedRegistrations;
+use App\Livewire\AddAthleteToContinget;
+use App\Livewire\ViewEachRegistration;
+use App\Livewire\EditEachRegistration;
+use App\Livewire\DetailsEachContingent;
+use App\Livewire\AssignMatchParticipants;
+
 
 //use App\Models\MatchRecord;
 
+Route::middleware(['auth'])->group(function () {
+    Route::impersonate();
+});
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', function () {
+    $users = \App\Models\User::where('id', '!=', auth()->id())->get();
+    return view('dashboard', compact('users'));
+})
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
@@ -60,6 +72,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/listcontingents', Listcontingents::class)->name('listContingents');
     Route::get('/editcontingent/{contingent}', EditContingent::class)->name('editContingent');
     Route::get('/listApprovedRegistrations', ListApprovedRegistrations::class)->name('listApprovedRegistrations');
+    Route::get('/addToContingent/{registration}', AddAthleteToContinget::class)->name('addToContingent');
+    Route::get('/viewRegistration/{registration}', ViewEachRegistration::class)->name('viewRegistration');
+    Route::get('/editRegistration/{registration}', EditEachRegistration::class)->name('editRegistration');
+    Route::get('/detailsEachContingent/{contingent}', DetailsEachContingent::class)->name('detailsEachContingent');
+    Route::get('/assignMatchParticipants', AssignMatchParticipants::class)->name('assignMatchParticipants');
 
 });
 // Protected management route for PICs only

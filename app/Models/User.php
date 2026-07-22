@@ -11,15 +11,28 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lab404\Impersonate\Models\Impersonate;
+use App\Models\Registration;
+
 
 #[Fillable(['name', 'email', 'password', 'role', 'contingent_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+    use Impersonate;
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasRoles {
         HasRoles::hasRole as spatieHasRole;
     }
+    public function canImpersonate(): bool
+    {
+        return $this->hasRole('Admin');
+    }
+    public function canBeImpersonated(): bool{
+        return !$this->hasRole('Admin');
+    }
+
+
 
     /**
      * Override hasRole to check the 'role' database column first,

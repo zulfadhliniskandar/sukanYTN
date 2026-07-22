@@ -11,7 +11,8 @@ class MatchParticipant extends Model
         'user_id',
         'contingent_id',
         'score',
-        'result'
+        'result',
+        'results'
     ];
 
     public function match(): BelongsTo

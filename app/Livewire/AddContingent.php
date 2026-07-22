@@ -28,7 +28,7 @@ class AddContingent extends Component
             'name' => $this->name,
         ]);
         session()->flash('success', 'Contingent added successfully');
-        $this->redirect('/dashboard', navigate: true);
+        $this->redirect(route('listContingents'), navigate: true);
         $this->reset();
     }
 }

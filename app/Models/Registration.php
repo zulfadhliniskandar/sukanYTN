@@ -31,4 +31,9 @@ class Registration extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function contingent(): BelongsTo
+    {
+        return $this->belongsTo(Contingent::class, 'contingent_id');
+    }
 }

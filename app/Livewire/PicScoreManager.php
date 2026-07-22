@@ -15,10 +15,25 @@ class PicScoreManager extends Component
         $this->match = $match;
     }
 
-    public function incrementScore($participantId){
-        if(auth()->check() && !auth()->user()->hasRole(["PIC", "Admin"])){
+    private function ensureAuthorized()
+    {
+        if (!auth()->check()) {
             throw new \Exception("Access Denied");
         }
+        if (auth()->user()->hasRole('Admin')) {
+            return;
+        }
+        $isPicForSport = \App\Models\PicSport::where('user_id', auth()->id())
+            ->where('sport_id', $this->match->sport_id)
+            ->exists();
+        
+        if (!$isPicForSport) {
+            throw new \Exception("Access Denied: You are not assigned to this sport.");
+        }
+    }
+
+    public function incrementScore($participantId){
+        $this->ensureAuthorized();
 
         $participant = $this->match->participants()->find($participantId);
         if ($participant) {
@@ -28,9 +43,7 @@ class PicScoreManager extends Component
     }
 
     public function decrementScore($participantId){
-        if(auth()->check() && !auth()->user()->hasRole(["PIC", "Admin"])){
-            throw new \Exception("Access Denied");
-        }
+        $this->ensureAuthorized();
 
         $participant = $this->match->participants()->find($participantId);
         if ($participant && $participant->score > 0) {
@@ -40,17 +53,36 @@ class PicScoreManager extends Component
     }
 
     public function updateStatus($status){
-        if(auth()->check() && !auth()->user()->hasRole(["PIC", "Admin"])){
-            throw new \Exception("Access Denied");
-        }
+        $this->ensureAuthorized();
 
         $this->match->update(['status' => $status]);
+
+        if ($status === 'finished') {
+            $participants = $this->match->participants;
+            if ($participants->count() === 2) {
+                $p1 = $participants[0];
+                $p2 = $participants[1];
+
+                if ($p1->score > $p2->score) {
+                    $p1->update(['results' => 'win']);
+                    $p2->update(['results' => 'lose']);
+                } elseif ($p2->score > $p1->score) {
+                    $p1->update(['results' => 'lose']);
+                    $p2->update(['results' => 'win']);
+                } else {
+                    $p1->update(['results' => 'draw']);
+                    $p2->update(['results' => 'draw']);
+                }
+            }
+        }
     }
     
     public function render()
     {
-        if(!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])){
-            abort(404);
+        try {
+            $this->ensureAuthorized();
+        } catch (\Exception $e) {
+            abort(403);
         }
         return view('livewire.pic-score-manager');
     }
