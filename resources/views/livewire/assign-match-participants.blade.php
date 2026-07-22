@@ -59,7 +59,8 @@
                 class="mt-1.5 text-xs text-rose-600 block font-semibold">{{ $message }}</span> @enderror
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4 border-t border-slate-100 relative">
+            <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4 border-t border-slate-100 relative my-4">
                 <!-- Participant 1 -->
                 <div>
                     <label for="participant1" class="block text-sm font-bold text-slate-700 mb-2">Participant 1 <span
@@ -81,7 +82,7 @@
                 <div
                     class="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 translate-y-1 z-10 items-center justify-center">
                     <span
-                        class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 border border-slate-200 flex items-center justify-center text-xs font-black select-none shadow-sm">VS</span>
+                        class="w-10 h-10 rounded-full bg-slate-100 text-slate-400 border border-slate-200 flex items-center justify-center text-xs font-black select-none shadow-sm ml-2 mr-2">VS</span>
                 </div>
 
                 <!-- Participant 2 -->

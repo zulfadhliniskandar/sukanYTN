@@ -53,22 +53,41 @@ new class extends Component {
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate>
-                        {{ __('List Venue') }}
+                        {{ __('Venues') }}
                     </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate>
-                        {{ __('List Sport') }}
+                        {{ __('Sports') }}
                     </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
                 </div>
                 @if(auth()->user()->hasRole(['Admin']))
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingent')"
                             wire:navigate>
-                            {{ __('List Contingent') }}
-                        </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
+                            {{ __('Contingents') }}
+                        </x-nav-link>
+                    </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('assignMatchParticipants')"
+                            :active="request()->routeIs('assignMatchParticipants')" wire:navigate>
+                            {{ __('Assign Match Participants') }}
+                        </x-nav-link>
                     </div>
                 @endif
+
+                @impersonating
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <a href="{{ route('impersonate.leave') }}"
+                        class="inline-flex items-center px-4 py-1.5 border border-transparent text-sm font-bold rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 hover:text-rose-800 transition-colors shadow-sm self-center ml-4">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Leave Impersonation
+                    </a>
+                </div>
+                @endImpersonating
 
 
 
@@ -140,10 +159,40 @@ new class extends Component {
             <x-responsive-nav-link :href="route('listMatch')" :active="request()->routeIs('listMatch')" wire:navigate>
                 {{ __('Matches') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('approveRegistration')"
+                :active="request()->routeIs('approveRegistration')" wire:navigate>
+                {{ __('Approve Registration') }}
+            </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate>
                 {{ __('Venues') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate>
+                {{ __('Sports') }}
+            </x-responsive-nav-link>
+            @if(auth()->user()->hasRole(['Admin']))
+                <x-responsive-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingents')"
+                    wire:navigate>
+                    {{ __('Contingents') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('assignMatchParticipants')"
+                    :active="request()->routeIs('assignMatchParticipants')" wire:navigate>
+                    {{ __('Assign Match Participants') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
+
+        @impersonating
+        <div class="pt-2 pb-3 px-4 border-t border-gray-200">
+            <a href="{{ route('impersonate.leave') }}"
+                class="flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-bold rounded-lg text-rose-700 bg-rose-100 hover:bg-rose-200 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Leave Impersonation
+            </a>
+        </div>
+        @endImpersonating
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
