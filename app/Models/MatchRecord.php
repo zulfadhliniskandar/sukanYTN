@@ -11,7 +11,13 @@ class MatchRecord extends Model
         'sport_id', 
         'title', 
         'status', 
-        'start_time'
+        'start_time', 
+        'end_time'
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     public function sport(): BelongsTo

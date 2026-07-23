@@ -13,6 +13,11 @@ class PicScoreManager extends Component
 
     public function mount(MatchRecord $match){
         $this->match = $match;
+
+        if ($this->match->participants()->count() === 0) {
+            session()->flash('warning', 'No participants assigned to this match yet. Please assign participants first.');
+            return redirect()->route('assignMatchParticipants', ['title' => $this->match->title]);
+        }
     }
 
     private function ensureAuthorized()
@@ -57,7 +62,15 @@ class PicScoreManager extends Component
 
         $this->match->update(['status' => $status]);
 
-        if ($status === 'finished') {
+        if($status === 'ongoing'){
+        MatchRecord::where('id', $this->match->id)->update(['start_time' => now()]);
+        }
+
+        if($status === 'finished'){
+        MatchRecord::where('id', $this->match->id)->update(['end_time' => now()]);
+        }
+
+        if   ($status === 'finished') {
             $participants = $this->match->participants;
             if ($participants->count() === 2) {
                 $p1 = $participants[0];

@@ -26,6 +26,7 @@ use App\Livewire\ViewEachRegistration;
 use App\Livewire\EditEachRegistration;
 use App\Livewire\DetailsEachContingent;
 use App\Livewire\AssignMatchParticipants;
+use App\Livewire\EditMatch;
 
 
 //use App\Models\MatchRecord;
@@ -77,7 +78,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/editRegistration/{registration}', EditEachRegistration::class)->name('editRegistration');
     Route::get('/detailsEachContingent/{contingent}', DetailsEachContingent::class)->name('detailsEachContingent');
     Route::get('/assignMatchParticipants', AssignMatchParticipants::class)->name('assignMatchParticipants');
-
+    Route::get('editMatch/{match}', EditMatch::class)->name('editMatch');
 });
 // Protected management route for PICs only
 //Route::middleware(['auth', 'role:PIC|Admin'])->group(function () {

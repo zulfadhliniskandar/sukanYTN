@@ -6,16 +6,19 @@ use Livewire\Component;
 use App\Models\MatchRecord;
 use App\Models\MatchParticipant;
 use App\Models\Registration;
+use Livewire\Attributes\Url;
 
 class AssignMatchParticipants extends Component
 {
     public $matches = [];
     public $registrations = [];
 
+    #[Url]
+    public $title = '';
+
     public $selectedMatch;
     public $participant1;
     public $participant2;
-    
 
     public function mount()
     {
@@ -23,6 +26,14 @@ class AssignMatchParticipants extends Component
         $this->registrations = Registration::where('status', 'approved')
             ->whereNotNull('contingent_id')
             ->get();
+
+        if ($this->title) {
+            $match = MatchRecord::where('title', $this->title)->first();
+            if ($match) {
+                $this->selectedMatch = $match->id;
+                $this->updatedSelectedMatch($match->id);
+            }
+        }
     }
 
     public function updatedSelectedMatch($value)
@@ -87,8 +98,8 @@ class AssignMatchParticipants extends Component
         ]);
 
         session()->flash('success', 'Match participants assigned successfully.');
-        $this->reset(['participant1', 'participant2', 'selectedMatch']);
-        $this->matches = MatchRecord::doesntHave('participants')->get();
+        $this->reset(['participant1', 'participant2', 'selectedMatch', 'title']);
+        $this->matches = MatchRecord::all();
         $this->registrations = Registration::where('status', 'approved')
             ->whereNotNull('contingent_id')
             ->get();

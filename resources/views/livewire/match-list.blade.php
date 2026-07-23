@@ -100,36 +100,49 @@
                         </a>
                     </div>
 
-                    <div
-                        class="flex justify-between items-center bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-6 shadow-inner relative overflow-hidden">
-                        @foreach($match->participants as $participant)
-                            <div class="text-center flex-1 min-w-0">
-                                <p class="text-sm font-bold truncate px-2 capitalize {{ auth()->check() && $participant->user_id === auth()->id() ? 'text-indigo-700 font-extrabold' : 'text-slate-500' }}">
-                                    {{ $participant->user->name ?? 'Participant' }}
-                                    @if(auth()->check() && $participant->user_id === auth()->id())
-                                        <span class="text-[10px] bg-indigo-100 text-indigo-700 font-extrabold px-1.5 py-0.5 rounded ml-1 lowercase">(you)</span>
-                                    @endif
-                                </p>
-                                <div class="text-5xl font-black text-indigo-600 mt-2 tracking-tight">
-                                    {{ $livescore[$participant->id] ?? $participant->score }}
-                                </div>
-                                @if($match->status === 'finished' && $participant->results)
-                                    <div class="mt-2">
-                                        @if($participant->results === 'win')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">Winner</span>
-                                        @elseif($participant->results === 'lose')
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-wider">Runner-up</span>
-                                        @else
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">Draw</span>
-                                        @endif
-                                    </div>
-                                @endif
-                            </div>
-                            @if(!$loop->last)
-                                <div class="text-xs font-black text-slate-350 px-4 select-none">VS</div>
+                    @if($match->participants->isEmpty())
+                        <div class="bg-amber-50/60 p-6 rounded-2xl border border-amber-100/80 mb-6 text-center">
+                            <p class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">No Participants Assigned</p>
+                            <p class="text-xs text-slate-500 mb-3">Athletes or contingents have not been assigned to this match yet.</p>
+                            @if(auth()->check() && auth()->user()->hasRole(['Admin', 'PIC']))
+                                <a href="{{ route('assignMatchParticipants', ['title' => $match->title]) }}" wire:navigate
+                                    class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-md shadow-amber-200/50 transition-all">
+                                    Assign Participants →
+                                </a>
                             @endif
-                        @endforeach
-                    </div>
+                        </div>
+                    @else
+                        <div
+                            class="flex justify-between items-center bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-6 shadow-inner relative overflow-hidden">
+                            @foreach($match->participants as $participant)
+                                <div class="text-center flex-1 min-w-0">
+                                    <p class="text-sm font-bold truncate px-2 capitalize {{ auth()->check() && $participant->user_id === auth()->id() ? 'text-indigo-700 font-extrabold' : 'text-slate-500' }}">
+                                        {{ $participant->user->name ?? 'Participant' }}
+                                        @if(auth()->check() && $participant->user_id === auth()->id())
+                                            <span class="text-[10px] bg-indigo-100 text-indigo-700 font-extrabold px-1.5 py-0.5 rounded ml-1 lowercase">(you)</span>
+                                        @endif
+                                    </p>
+                                    <div class="text-5xl font-black text-indigo-600 mt-2 tracking-tight">
+                                        {{ $livescore[$participant->id] ?? $participant->score }}
+                                    </div>
+                                    @if($match->status === 'finished' && $participant->results)
+                                        <div class="mt-2">
+                                            @if($participant->results === 'win')
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase tracking-wider">Winner</span>
+                                            @elseif($participant->results === 'lose')
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100 uppercase tracking-wider">Runner-up</span>
+                                            @else
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200 uppercase tracking-wider">Draw</span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+                                @if(!$loop->last)
+                                    <div class="text-xs font-black text-slate-350 px-4 select-none">VS</div>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
 
                 <div class="pt-4 border-t border-slate-100 flex justify-between items-center text-sm mt-auto gap-4">
@@ -156,7 +169,20 @@
                         </a>
                     @endif
                 </div>
+                @if (auth()->check() && auth()->user()->hasRole('pic||admin'))
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex gap-2 justify-end">
+                            <a href="{{ route('editMatch', $match->id) }}" wire:navigate
+                                class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition-all" title="Edit">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            </a>
+                            <button type="button" wire:confirm="Are you sure you want to delete this match?" wire:click="deleteMatch('{{ $match->id }}')"
+                                class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white border border-slate-200 text-slate-600 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200 transition-all" title="Delete">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    @endif
             </div>
+            
         @empty
             <div
                 class="col-span-full text-center py-20 bg-white/80 backdrop-blur rounded-3xl border border-dashed border-slate-300 shadow-sm">

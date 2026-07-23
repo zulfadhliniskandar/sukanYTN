@@ -59,5 +59,15 @@ class MatchList extends Component
                 'finished' => $finishedCount,
             ]
         ]);
+
+
+    }
+
+    public function deleteMatch($id)
+    {
+        $match = MatchRecord::find($id);
+        $match->delete();
+        session()->flash('success', 'Match deleted successfully');
+        return redirect()->route('listMatch');
     }
 }

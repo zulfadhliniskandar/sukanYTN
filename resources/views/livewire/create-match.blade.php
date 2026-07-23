@@ -92,7 +92,7 @@
                 <a href="{{ route('listMatch') }}" wire:navigate class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-xl transition-all">
                     Cancel
                 </a>
-                <button type="submit" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-xl shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                <button type="submit" class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-xl shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 cursor-pointer">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                     </svg>
@@ -101,4 +101,50 @@
             </div>
         </form>
     </div>
+
+    <!-- Assign Participants Modal -->
+    @if($showAssignModal)
+        <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <!-- Background backdrop -->
+                <div class="fixed inset-0 transition-opacity bg-slate-900/60 backdrop-blur-sm" aria-hidden="true"></div>
+
+                <!-- Modal panel center trick -->
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+                <div class="inline-block px-6 pt-6 pb-8 overflow-hidden text-left align-bottom transition-all transform bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-slate-100 sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-emerald-100 text-emerald-600 shadow-md shadow-emerald-100">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tight" id="modal-title">
+                            Match Scheduled!
+                        </h3>
+                        <p class="mt-2 text-sm text-slate-600">
+                            <span class="font-bold text-indigo-700">"{{ $createdMatchTitle }}"</span> has been saved successfully to the database.
+                        </p>
+                        <p class="mt-2 text-sm font-semibold text-slate-500">
+                            Would you like to assign participants to this match now?
+                        </p>
+                    </div>
+
+                    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                        <button type="button" wire:click="assignNow"
+                            class="w-full inline-flex justify-center items-center px-5 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold text-xs uppercase tracking-wider rounded-2xl shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 transition-all transform hover:-translate-y-0.5 cursor-pointer">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                            </svg>
+                            Assign Now
+                        </button>
+                        <button type="button" wire:click="assignLater"
+                            class="w-full inline-flex justify-center items-center px-5 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs uppercase tracking-wider rounded-2xl border border-slate-200 transition-all cursor-pointer">
+                            Later (Match List)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

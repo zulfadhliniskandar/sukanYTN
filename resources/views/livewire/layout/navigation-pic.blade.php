@@ -19,88 +19,61 @@ new class extends Component {
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center min-w-0">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <img class="h-20 w-20" src="{{ asset('icons/logotsytn.png') }}" alt="TSYTN Logo">
+                        <img class="h-14 w-14 object-contain" src="{{ asset('icons/logotsytn.png') }}" alt="TSYTN Logo">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                <div class="hidden lg:flex lg:items-center space-x-2 xl:space-x-5 -my-px ms-6 xl:ms-8 overflow-x-auto">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate class="whitespace-nowrap">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('listMatch')" :active="request()->routeIs('listMatch')" wire:navigate>
+
+                    <x-nav-link :href="route('listMatch')" :active="request()->routeIs('listMatch')" wire:navigate class="whitespace-nowrap">
                         {{ __('Matches') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('approveRegistration')" :active="request()->routeIs('approveRegistration')"
-                        wire:navigate>
+
+                    <x-nav-link :href="route('approveRegistration')" :active="request()->routeIs('approveRegistration')" wire:navigate class="whitespace-nowrap">
                         {{ __('Approve Registration') }}
                     </x-nav-link>
-                </div>
 
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('addVenue')" :active="request()->routeIs('addVenue')" wire:navigate>
-                        {{ __('Add Venue') }}
-                    </x-nav-link>
-                </div> --}}
-
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate>
+                    <x-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate class="whitespace-nowrap">
                         {{ __('Venues') }}
-                    </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate>
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate class="whitespace-nowrap">
                         {{ __('Sports') }}
-                    </x-nav-link> {{-- Nanti sini cek sbb admin sj yg akan add the venue --}}
-                </div>
-                @if(auth()->user()->hasRole(['Admin']))
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingent')"
-                            wire:navigate>
+                    </x-nav-link>
+
+                    @if(auth()->user()->hasRole(['Admin']))
+                        <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingents')" wire:navigate class="whitespace-nowrap">
                             {{ __('Contingents') }}
                         </x-nav-link>
-                    </div>
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('assignMatchParticipants')"
-                            :active="request()->routeIs('assignMatchParticipants')" wire:navigate>
-                            {{ __('Assign Match Participants') }}
-                        </x-nav-link>
-                    </div>
-                @endif
 
-                @impersonating
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('assignMatchParticipants')" :active="request()->routeIs('assignMatchParticipants')" wire:navigate class="whitespace-nowrap">
+                            {{ __('Assign Participants') }}
+                        </x-nav-link>
+                    @endif
+
+                    @impersonating
                     <a href="{{ route('impersonate.leave') }}"
-                        class="inline-flex items-center px-4 py-1.5 border border-transparent text-sm font-bold rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 hover:text-rose-800 transition-colors shadow-sm self-center ml-4">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-bold rounded-full text-rose-700 bg-rose-100 hover:bg-rose-200 transition-colors shadow-xs shrink-0 whitespace-nowrap">
+                        <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                         Leave Impersonation
                     </a>
+                    @endImpersonating
                 </div>
-                @endImpersonating
-
-
-
-                {{-- <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('scores.manage', ['match_id' => $match->id])"
-                        :active="request()->routeIs('scores.manage', ['match_id' => $match->id])" wire:navigate>
-                        {{ __('Manage Scores') }}
-                    </x-nav-link>
-                </div> --}}
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden lg:flex lg:items-center lg:ms-4 shrink-0">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
@@ -135,7 +108,7 @@ new class extends Component {
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center lg:hidden">
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -151,7 +124,7 @@ new class extends Component {
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
                 {{ __('Dashboard') }}
