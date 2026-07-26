@@ -5,20 +5,36 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\MatchRecord;
 use Livewire\Attributes\On;
+use App\Models\PicSport;
+
+
+use Livewire\Attributes\Url;
 
 class MatchList extends Component
 {
     public $livescore = [];
+
+    #[Url(as: 'status')]
     public $selectedStatus = 'all';
 
     public function mount()
     {
+        if (request()->has('status')) {
+            $this->selectedStatus = request('status');
+        }
         $this->loadScores();
     }
 
     public function loadScores()
     {
-        $matches = MatchRecord::with('participants')->get();
+        $query = MatchRecord::with('participants');
+
+        if (auth()->check() && auth()->user()->hasRole('PIC') && !auth()->user()->hasRole('Admin')) {
+            $picSportIds = PicSport::where('user_id', auth()->id())->pluck('sport_id');
+            $query->whereIn('sport_id', $picSportIds);
+        }
+
+        $matches = $query->get();
         foreach ($matches as $match) {
             foreach ($match->participants as $participant) {
                 $this->livescore[$participant->id] = $participant->score;
@@ -39,16 +55,26 @@ class MatchList extends Component
 
     public function render()
     {
-        $query = MatchRecord::with('participants.user');
+        $query = MatchRecord::with(['participants.user', 'sport']);
+        $baseQuery = MatchRecord::query();
 
-        if ($this->selectedStatus && $this->selectedStatus !== 'all') {
-            $query->where('status', $this->selectedStatus);
+        if (auth()->check() && auth()->user()->hasRole('PIC') && !auth()->user()->hasRole('Admin')) {
+            $picSportIds = PicSport::where('user_id', auth()->id())->pluck('sport_id');
+            $query->whereIn('sport_id', $picSportIds);
+            $baseQuery->whereIn('sport_id', $picSportIds);
         }
 
-        $allCount = MatchRecord::count();
-        $scheduledCount = MatchRecord::where('status', 'scheduled')->count();
-        $ongoingCount = MatchRecord::where('status', 'ongoing')->count();
-        $finishedCount = MatchRecord::where('status', 'finished')->count();
+        $allCount = (clone $baseQuery)->count();
+        $scheduledCount = (clone $baseQuery)->where('status', 'scheduled')->count();
+        $ongoingCount = (clone $baseQuery)->where('status', 'ongoing')->count();
+        $finishedCount = (clone $baseQuery)->where('status', 'finished')->count();
+        $noParticipantCount = (clone $baseQuery)->doesntHave('participants')->count();
+
+        if ($this->selectedStatus === 'no_participant') {
+            $query->doesntHave('participants');
+        } elseif ($this->selectedStatus && $this->selectedStatus !== 'all') {
+            $query->where('status', $this->selectedStatus);
+        }
 
         return view('livewire.match-list', [
             'matches' => $query->get(),
@@ -57,10 +83,9 @@ class MatchList extends Component
                 'scheduled' => $scheduledCount,
                 'ongoing' => $ongoingCount,
                 'finished' => $finishedCount,
+                'no_participant' => $noParticipantCount,
             ]
         ]);
-
-
     }
 
     public function deleteMatch($id)

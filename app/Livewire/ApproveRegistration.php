@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Registration;
 use App\Models\User;
+use App\Models\PicSport;
 
 
 class ApproveRegistration extends Component
@@ -17,7 +18,12 @@ class ApproveRegistration extends Component
         if (!auth()->check()) {
             abort(404);
         }
-        $this->registrations = Registration::where('status', 'pending')->get();
+        if (auth()->check() && auth()->user()->hasRole('Admin')) {
+            $this->registrations = Registration::where('status', 'pending')->get();
+        } elseif (auth()->check() && auth()->user()->hasRole('PIC')) {
+            $picSportIds = PicSport::where('user_id', auth()->id())->pluck('sport_id');
+            $this->registrations = Registration::where('status', 'pending')->whereIn('sport_id', $picSportIds)->get();
+        }
     }
 
     public function render()

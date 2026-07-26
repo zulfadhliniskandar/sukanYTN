@@ -71,8 +71,13 @@
                         @endphp
                         <a href="{{ $canManage ? route('scores.manage', $match->id) : '#' }}"
                             @if($canManage) wire:navigate @endif
-                            class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl transition-all
-                            {{ $canManage ? 'text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/50' : 'text-slate-400 bg-slate-100 cursor-not-allowed pointer-events-none border border-slate-200' }}">
+                            class="inline-flex items-center justify-center px-4 py-2 text-xs font-black rounded-xl transition-all duration-200
+                            {{ $canManage ? 'bg-gradient-to-r from-red-600 via-rose-600 to-pink-600 hover:from-red-700 hover:to-rose-700 text-white shadow-md shadow-rose-200/80 hover:shadow-lg hover:shadow-rose-300/80 transform hover:-translate-y-0.5 active:translate-y-0' : 'text-slate-400 bg-slate-100 cursor-not-allowed pointer-events-none border border-slate-200' }}">
+                            @if($canManage)
+                                <svg class="w-3.5 h-3.5 mr-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            @endif
                             Manage Scores
                         </a>
                     @endif

@@ -46,6 +46,48 @@
             <p class="text-slate-500 max-w-md mx-auto">There are currently no approved registrations in the system. Check the pending approvals page.</p>
         </div>
     @else
+        <!-- Beautified Responsive Filter Buttons Bar (No Scroll, Grid on Mobile, Flex on Desktop) -->
+    <div class="mb-8 grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 bg-slate-100/80 p-1.5 sm:p-2 rounded-2xl border border-slate-200/60 shadow-inner w-full sm:w-fit">
+        <button wire:click="filter('all')"
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedType === 'all' ? 'bg-gradient-to-r from-slate-600 to-slate-900 text-white shadow-md shadow-slate-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
+            <span>All</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedType === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-700' }}">
+                {{ $counts['all'] ?? 0 }}
+            </span>
+        </button>
+
+        <button wire:click="filter('team')"
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedType === 'team' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
+            <span>Team</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedType === 'team' ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-700' }}">
+                {{ $counts['team'] ?? 0 }}
+            </span>
+        </button>
+
+        <button wire:click="filter('individual')"
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedType === 'individual' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
+            <span class="w-2 h-2 rounded-full {{ $selectedType === 'individual' ? 'bg-white animate-pulse' : 'bg-emerald-500' }}"></span>
+            <span>Individual</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedType === 'individual' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800' }}">
+                {{ $counts['individual'] ?? 0 }}
+            </span>
+        </button>
+
+        @if (auth()->check() && auth()->user()->hasRole(['Admin']) && ($counts['no_contingent'] ?? 0) > 0)  
+        <button wire:click="filter('no_contingent')"
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none col-span-2 sm:col-span-1
+            {{ $selectedType === 'no_contingent' ? 'bg-gradient-to-r from-red-600 via-rose-600 to-pink-600 text-white shadow-md shadow-rose-200 scale-[1.02]' : 'text-rose-700 bg-rose-50/90 border border-rose-200/80 hover:bg-rose-100/90' }}">
+            <span class="w-2 h-2 rounded-full {{ $selectedType === 'no_contingent' ? 'bg-white animate-ping' : 'bg-rose-500' }}"></span>
+            <span>Unassigned Contingent</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedType === 'no_contingent' ? 'bg-white/20 text-white' : 'bg-rose-200 text-rose-800' }}">
+                {{ $counts['no_contingent'] ?? 0 }}
+            </span>
+        </button>
+        @endif
+    </div>
         <!-- Registrations Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             @foreach ($approvedRegistrations as $registration)
@@ -77,12 +119,17 @@
                                     </svg>
                                     {{ is_array($registration->name) ? count($registration->name) : 0 }} Members
                                 </span>
-                                
                                 @if(!$registration->contingent)
-                                    <a href="{{ route('addToContingent', $registration) }}" wire:navigate class="flex items-center text-rose-500 hover:text-rose-700 hover:underline">
-                                        <svg class="mr-1 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                        No Contingent
-                                    </a>
+                                    @if(auth()->user()->hasRole('Admin'))
+                                        <a href="{{ route('addToContingent', $registration) }}" wire:navigate class="flex items-center text-rose-500 hover:text-rose-700 hover:underline">
+                                            <svg class="mr-1 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                            No Contingent
+                                        </a>
+                                    @else
+                                        <span class="flex items-center text-indigo-700 bg-white/60 backdrop-blur px-2 py-0.5 rounded-full text-xs font-semibold border border-indigo-200">
+                                            Waiting admin assign this participant
+                                        </span>
+                                    @endif
                                 @else
                                     <span class="flex items-center text-indigo-700 bg-white/60 backdrop-blur px-2 py-0.5 rounded-full text-xs font-semibold border border-indigo-200">
                                         {{ $registration->contingent->name }}
@@ -155,10 +202,16 @@
                                     <p class="text-sm font-medium text-slate-500 mb-2">Individual Athlete</p>
                                     
                                     @if(!$registration->contingent)
-                                        <a href="{{ route('addToContingent', $registration) }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-rose-500 hover:text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md border border-rose-100 transition-colors shadow-sm">
-                                            <svg class="mr-1.5 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                            Add Contingent
-                                        </a>
+                                        @if(auth()->user()->hasRole('Admin'))
+                                            <a href="{{ route('addToContingent', $registration) }}" wire:navigate class="inline-flex items-center text-xs font-semibold text-rose-500 hover:text-rose-700 bg-rose-50 px-2.5 py-1 rounded-md border border-rose-100 transition-colors shadow-sm">
+                                                <svg class="mr-1.5 h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                                Add Contingent
+                                            </a>
+                                        @else
+                                            <span class="inline-flex items-center text-indigo-700 bg-white/60 backdrop-blur px-2.5 py-1 rounded-full text-xs font-semibold border border-indigo-200">
+                                                Waiting admin assign this participant
+                                            </span>
+                                        @endif
                                     @else
                                         <span class="inline-flex items-center text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full text-xs font-semibold border border-emerald-200 shadow-sm">
                                             <svg class="mr-1.5 h-3.5 w-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>

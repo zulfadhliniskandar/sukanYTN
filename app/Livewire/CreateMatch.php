@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\MatchRecord;
+use App\Models\PicSport;
 use App\Models\Sport;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -26,7 +27,15 @@ class CreateMatch extends Component
 
     public function mount()
     {
-        $this->sports = Sport::all();
+        if (!auth()->check() || !auth()->user()->hasRole(['PIC', 'Admin'])) {
+            abort(404);
+        }
+        if (auth()->user()->hasRole('Admin')) {
+            $this->sports = Sport::all();
+        } elseif (auth()->user()->hasRole('PIC')) {
+            $picSportIds = PicSport::where('user_id', auth()->id())->pluck('sport_id');
+            $this->sports = Sport::whereIn('id', $picSportIds)->get();
+        }
     }
 
     public function render()

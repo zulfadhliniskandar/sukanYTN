@@ -29,32 +29,39 @@ new class extends Component {
 
                 <!-- Navigation Links -->
                 <div class="hidden lg:flex lg:items-center space-x-2 xl:space-x-5 -my-px ms-6 xl:ms-8 overflow-x-auto">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate class="whitespace-nowrap">
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate
+                        class="whitespace-nowrap">
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('listMatch')" :active="request()->routeIs('listMatch')" wire:navigate class="whitespace-nowrap">
+                    <x-nav-link :href="route('listMatch')" :active="request()->routeIs('listMatch')" wire:navigate
+                        class="whitespace-nowrap">
                         {{ __('Matches') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('approveRegistration')" :active="request()->routeIs('approveRegistration')" wire:navigate class="whitespace-nowrap">
+                    <x-nav-link :href="route('approveRegistration')" :active="request()->routeIs('approveRegistration')"
+                        wire:navigate class="whitespace-nowrap">
                         {{ __('Approve Registration') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate class="whitespace-nowrap">
+                    <x-nav-link :href="route('listVenue')" :active="request()->routeIs('listVenue')" wire:navigate
+                        class="whitespace-nowrap">
                         {{ __('Venues') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate class="whitespace-nowrap">
+                    <x-nav-link :href="route('listSport')" :active="request()->routeIs('listSport')" wire:navigate
+                        class="whitespace-nowrap">
                         {{ __('Sports') }}
                     </x-nav-link>
 
-                    @if(auth()->user()->hasRole(['Admin']))
-                        <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingents')" wire:navigate class="whitespace-nowrap">
+                    @if(auth()->user()->hasRole(['Admin', 'PIC']))
+                        <x-nav-link :href="route('listContingents')" :active="request()->routeIs('listContingents')"
+                            wire:navigate class="whitespace-nowrap">
                             {{ __('Contingents') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('assignMatchParticipants')" :active="request()->routeIs('assignMatchParticipants')" wire:navigate class="whitespace-nowrap">
+                        <x-nav-link :href="route('assignMatchParticipants')"
+                            :active="request()->routeIs('assignMatchParticipants')" wire:navigate class="whitespace-nowrap">
                             {{ __('Assign Participants') }}
                         </x-nav-link>
                     @endif

@@ -28,11 +28,11 @@
         @endif
     </div>
 
-    <!-- Beautified Filter Buttons Bar -->
-    <div class="mb-8 flex items-center justify-between flex-wrap gap-2 bg-slate-100/70 p-1.5 rounded-2xl border border-slate-200/60 shadow-inner max-w-fit">
+    <!-- Beautified Responsive Filter Buttons Bar (No Scroll, Grid on Mobile, Flex on Desktop) -->
+    <div class="mb-8 grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 bg-slate-100/80 p-1.5 sm:p-2 rounded-2xl border border-slate-200/60 shadow-inner w-full sm:w-fit">
         <button wire:click="filter('all')"
-            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
-            {{ $selectedStatus === 'all' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-200/50 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedStatus === 'all' ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
             <span>All Matches</span>
             <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedStatus === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200/80 text-slate-700' }}">
                 {{ $counts['all'] ?? 0 }}
@@ -40,8 +40,8 @@
         </button>
 
         <button wire:click="filter('ongoing')"
-            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
-            {{ $selectedStatus === 'ongoing' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-200/50 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedStatus === 'ongoing' ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
             <span class="w-2 h-2 rounded-full {{ $selectedStatus === 'ongoing' ? 'bg-white animate-pulse' : 'bg-emerald-500' }}"></span>
             <span>Ongoing</span>
             <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedStatus === 'ongoing' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-800' }}">
@@ -50,8 +50,8 @@
         </button>
 
         <button wire:click="filter('scheduled')"
-            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
-            {{ $selectedStatus === 'scheduled' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-200/50 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedStatus === 'scheduled' ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-200/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
             <span class="w-2 h-2 rounded-full {{ $selectedStatus === 'scheduled' ? 'bg-white' : 'bg-amber-500' }}"></span>
             <span>Scheduled</span>
             <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedStatus === 'scheduled' ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-800' }}">
@@ -60,13 +60,25 @@
         </button>
 
         <button wire:click="filter('finished')"
-            class="inline-flex items-center gap-2 px-4 py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
-            {{ $selectedStatus === 'finished' ? 'bg-gradient-to-r from-slate-700 to-slate-900 text-white shadow-md shadow-slate-300/50 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60' }}">
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none
+            {{ $selectedStatus === 'finished' ? 'bg-gradient-to-r from-slate-700 to-slate-900 text-white shadow-md shadow-slate-300/50 scale-[1.02]' : 'text-slate-600 bg-white/50 sm:bg-transparent hover:text-slate-900 hover:bg-white/80' }}">
             <span>Finished</span>
             <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedStatus === 'finished' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700' }}">
                 {{ $counts['finished'] ?? 0 }}
             </span>
         </button>
+
+        @if (auth()->check() && auth()->user()->hasRole(['Admin', 'PIC']) && ($counts['no_participant'] ?? 0) > 0)  
+        <button wire:click="filter('no_participant')"
+            class="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-2 text-xs font-black rounded-xl transition-all duration-200 cursor-pointer select-none col-span-2 sm:col-span-1
+            {{ $selectedStatus === 'no_participant' ? 'bg-gradient-to-r from-red-600 via-rose-600 to-pink-600 text-white shadow-md shadow-rose-200 scale-[1.02]' : 'text-rose-700 bg-rose-50/90 border border-rose-200/80 hover:bg-rose-100/90' }}">
+            <span class="w-2 h-2 rounded-full {{ $selectedStatus === 'no_participant' ? 'bg-white animate-ping' : 'bg-rose-500' }}"></span>
+            <span>No Participant</span>
+            <span class="px-1.5 py-0.5 rounded-md text-[10px] font-black {{ $selectedStatus === 'no_participant' ? 'bg-white/20 text-white' : 'bg-rose-200 text-rose-800' }}">
+                {{ $counts['no_participant'] ?? 0 }}
+            </span>
+        </button>
+        @endif
     </div>
 
     <!-- Matches Grid -->
@@ -94,10 +106,12 @@
                         <h2 class="text-xl font-black text-slate-900 group-hover:text-indigo-650 transition-colors truncate">
                             {{ $match->title }}
                         </h2>
+                        @if(auth()->check())
                         <a href="{{ route('scores.show', $match->id) }}" wire:navigate
                             class="inline-flex items-center justify-center px-3.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-250 border-indigo-200/50 transition-all shadow-sm flex-shrink-0">
                             View Livecast →
                         </a>
+                        @endif
                     </div>
 
                     @if($match->participants->isEmpty())
@@ -163,8 +177,13 @@
                         @endphp
                         <a href="{{ $canManage ? route('scores.manage', $match->id) : '#' }}"
                             @if($canManage) wire:navigate @endif
-                            class="inline-flex items-center justify-center px-4 py-2 text-xs font-bold rounded-xl transition-all
-                            {{ $canManage ? 'text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/50' : 'text-slate-400 bg-slate-100 cursor-not-allowed pointer-events-none border border-slate-200' }}">
+                            class="inline-flex items-center justify-center px-4 py-2 text-xs font-black rounded-xl transition-all duration-200
+                            {{ $canManage ? 'bg-gradient-to-r from-red-600 via-rose-600 to-pink-600 hover:from-red-700 hover:to-rose-700 text-white shadow-md shadow-rose-200/80 hover:shadow-lg hover:shadow-rose-300/80 transform hover:-translate-y-0.5 active:translate-y-0' : 'text-slate-400 bg-slate-100 cursor-not-allowed pointer-events-none border border-slate-200' }}">
+                            @if($canManage)
+                                <svg class="w-3.5 h-3.5 mr-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            @endif
                             Manage Scores
                         </a>
                     @endif

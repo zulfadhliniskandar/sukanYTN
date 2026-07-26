@@ -16,7 +16,7 @@
             <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Approve Registrations</h1>
             <p class="mt-2 text-sm sm:text-base text-slate-500">Review and manage pending sport registrations below.</p>
         </div>
-        @if(auth()->check() && auth()->user()->hasRole('Admin'))
+        @if(auth()->check() && auth()->user()->hasRole(['Admin', 'PIC']))
             <a href="{{ route('listApprovedRegistrations') }}" wire:navigate
                 class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-xl shadow-md shadow-indigo-200 hover:from-indigo-700 hover:to-violet-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
                 <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,18 +72,16 @@
                         <div class="px-6 py-5 flex-1 bg-white">
                             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Team Roster ({{ is_array($reg->name) ? count($reg->name) : 0 }} Members)</h4>
                             <ul class="space-y-3">
-                                @if(is_array($reg->name) || is_object($reg->name))
-                                    @foreach ($reg->name as $member)
-                                        <li class="flex items-center text-sm font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                                            <div class="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700 flex items-center justify-center text-xs font-bold mr-3 border border-indigo-200 shadow-inner flex-shrink-0">
-                                                {{ substr($member, 0, 1) }}
-                                            </div>
-                                            <span class="truncate">{{ $member }}</span>
-                                        </li>
-                                    @endforeach
-                                @else
+                                @forelse ((array)$reg->name as $member)
+                                    <li class="flex items-center text-sm font-semibold text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                        <div class="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 text-indigo-700 flex items-center justify-center text-xs font-bold mr-3 border border-indigo-200 shadow-inner flex-shrink-0">
+                                            {{ substr($member, 0, 1) }}
+                                        </div>
+                                        <span class="truncate">{{ $member }}</span>
+                                    </li>
+                                @empty
                                     <li class="text-sm text-slate-500 italic bg-slate-50 p-3 rounded-lg border border-dashed border-slate-200">No members listed</li>
-                                @endif
+                                @endforelse
                             </ul>
                         </div>
 

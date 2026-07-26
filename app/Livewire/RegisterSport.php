@@ -106,8 +106,8 @@ class RegisterSport extends Component
             'user_id' => $this->user_id,
             'sport_id' => $this->sport_id,
         ]);
-        $this->reset();
+        
         session()->flash('success', 'You have successfully registered for the sport');
-        $this->redirect(route('dashboard'));
+        $this->redirect(route('registrationStatus'));
     }
 }

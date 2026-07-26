@@ -55,6 +55,6 @@ class AssignPIC extends Component
         }
 
         session()->flash('success', 'PIC assigned successfully');
-        $this->redirect('/dashboard', navigate: true);
+        $this->redirect(route('listPIC', ['sport' => $this->sport->id]), navigate: true);
     }
 }

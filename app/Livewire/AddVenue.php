@@ -40,7 +40,7 @@ class AddVenue extends Component
             'description' => $this->description,
         ]);
         session()->flash('success', 'Venue added successfully');
-        $this->redirect('/dashboard', navigate: true);
-        $this->reset();
+        $this->redirect(route('listVenue'), navigate: true);
+        
     }
 }
